@@ -6,7 +6,11 @@ const prisma = new PrismaClient();
 
 beforeAll(() => {
   console.log(`using ${process.env.DATABASE_URL}`);
-  execSync("npm run test:prepare");
+  execSync("npm run test:reset-db");
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
 });
 
 afterAll(async () => {

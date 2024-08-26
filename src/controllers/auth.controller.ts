@@ -10,6 +10,15 @@ export class AuthController {
     try {
       const userData: CreateUserDTO = req.body;
       const emailToLowerCase = userData.email.toLowerCase();
+      const userAlreadyExists = await prisma.user.findUnique({
+        where: {
+          email: emailToLowerCase,
+        },
+      });
+      if (userAlreadyExists) {
+        return res.status(400).json({ message: `Email já cadastrado` });
+      }
+
       const hashedPassword = await bcrypt.hash(userData.password, 12);
       const user = await prisma.user.create({
         data: {
@@ -30,10 +39,10 @@ export class AuthController {
         token,
         user: { userId: user.id, name: user.name, email: user.email },
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       return res
         .status(500)
-        .json({ message: `Erro ao registrar usuário: ${error}` });
+        .json({ message: `Erro ao registrar usuário: ${error.message}` });
     }
   }
 
@@ -66,7 +75,7 @@ export class AuthController {
         token,
         user: { id: user.id, name: user.name, email: user.email },
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       return res.status(500).json({ message: `Erro ao fazer login: ${error}` });
     }
   }
