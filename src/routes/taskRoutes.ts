@@ -19,5 +19,6 @@ router.put(
   validateDTO(UpdateTaskDTO),
   TaskController.updateTask
 );
+router.delete("/:id", authenticateToken, TaskController.deleteTask);
 
 export default router;

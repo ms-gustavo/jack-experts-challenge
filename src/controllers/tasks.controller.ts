@@ -61,16 +61,40 @@ export class TaskController {
           ...updateTask,
         },
       });
-      return res
-        .status(200)
-        .json({
-          message: `Atividade atualizada com sucesso`,
-          task: updatedTask,
-        });
+      return res.status(200).json({
+        message: `Atividade atualizada com sucesso`,
+        task: updatedTask,
+      });
     } catch (error: unknown) {
       return res
         .status(500)
         .json({ message: `Erro ao atualizar atividade: ${error}` });
+    }
+  }
+
+  static async deleteTask(req: AuthRequest, res: Response) {
+    const { id } = req.params;
+
+    try {
+      const task = await prisma.task.findUnique({
+        where: { id: Number(id) },
+      });
+      if (!task) {
+        return res.status(404).json({ message: "Tarefa não encontrada" });
+      }
+
+      if (task.userId !== req.user!.userId) {
+        return res.status(403).json({ message: "Acesso negado" });
+      }
+
+      await prisma.task.delete({
+        where: { id: Number(id) },
+      });
+      return res.status(204).send();
+    } catch (error: unknown) {
+      return res
+        .status(500)
+        .json({ message: `Erro ao deletar tarefa ${error}` });
     }
   }
 }
