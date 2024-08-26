@@ -8,6 +8,27 @@ interface AuthRequest extends Request {
 }
 
 export class TaskController {
+  static async getTask(req: AuthRequest, res: Response) {
+    const { id } = req.params;
+    try {
+      const task = await prisma.task.findUnique({
+        where: { id: Number(id) },
+      });
+      if (!task) {
+        return res.status(404).json({ message: "Tarefa não encontrada" });
+      }
+
+      if (task.userId !== req.user!.userId) {
+        return res.status(403).json({ message: "Acesso negado" });
+      }
+      return res.json(task);
+    } catch (error: unknown) {
+      return res
+        .status(500)
+        .json({ message: `Erro ao buscar tarefa: ${error}` });
+    }
+  }
+
   static async getAllTasks(req: AuthRequest, res: Response) {
     try {
       const tasks = await prisma.task.findMany({

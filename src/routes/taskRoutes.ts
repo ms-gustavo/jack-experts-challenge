@@ -7,6 +7,7 @@ import { UpdateTaskDTO } from "../dtos/update-task.dto";
 const router = express.Router();
 
 router.get("/", authenticateToken, TaskController.getAllTasks);
+router.get("/:id", authenticateToken, TaskController.getTask);
 router.post(
   "/create",
   authenticateToken,
