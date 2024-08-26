@@ -8,7 +8,7 @@ interface AuthRequest extends Request {
 }
 
 export class TaskController {
-  static async getTask(req: AuthRequest, res: Response) {
+  static async getTask(req: AuthRequest, res: Response): Promise<Response> {
     const { id } = req.params;
     try {
       const task = await prisma.task.findUnique({
@@ -29,14 +29,13 @@ export class TaskController {
     }
   }
 
-  static async getAllTasks(req: AuthRequest, res: Response) {
+  static async getAllTasks(req: AuthRequest, res: Response): Promise<Response> {
     try {
       const tasks = await prisma.task.findMany({
         where: { userId: req.user!.userId },
       });
       if (tasks.length === 0) {
-        res.status(204).json();
-        return;
+        return res.status(204).json();
       }
       return res.json(tasks);
     } catch (error: unknown) {
@@ -46,22 +45,28 @@ export class TaskController {
     }
   }
 
-  static async createTask(req: AuthRequest, res: Response) {
-    const taskData: CreateTaskDTO = req.body;
+  static async createTask(req: AuthRequest, res: Response): Promise<Response> {
+    try {
+      const taskData: CreateTaskDTO = req.body;
 
-    const task = await prisma.task.create({
-      data: {
-        ...taskData,
-        userId: req.user!.userId,
-      },
-    });
+      const task = await prisma.task.create({
+        data: {
+          ...taskData,
+          userId: req.user!.userId,
+        },
+      });
 
-    return res
-      .status(200)
-      .json({ message: `Atividade criada com sucesso`, task });
+      return res
+        .status(200)
+        .json({ message: `Atividade criada com sucesso`, task });
+    } catch (error: unknown) {
+      return res
+        .status(500)
+        .json({ message: `Erro ao criar atividade: ${error}` });
+    }
   }
 
-  static async updateTask(req: AuthRequest, res: Response) {
+  static async updateTask(req: AuthRequest, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
       const updateTask: UpdateTaskDTO = req.body;
@@ -93,7 +98,7 @@ export class TaskController {
     }
   }
 
-  static async deleteTask(req: AuthRequest, res: Response) {
+  static async deleteTask(req: AuthRequest, res: Response): Promise<Response> {
     const { id } = req.params;
 
     try {
