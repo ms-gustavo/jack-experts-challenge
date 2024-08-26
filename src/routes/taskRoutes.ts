@@ -3,6 +3,7 @@ import { TaskController } from "../controllers/tasks.controller";
 import { authenticateToken } from "../middlewares/auth.middleware";
 import { validateDTO } from "../middlewares/validate.middleware";
 import { CreateTaskDTO } from "../dtos/create-task.dto";
+import { UpdateTaskDTO } from "../dtos/update-task.dto";
 const router = express.Router();
 
 router.get("/", authenticateToken, TaskController.getAllTasks);
@@ -11,6 +12,12 @@ router.post(
   authenticateToken,
   validateDTO(CreateTaskDTO),
   TaskController.createTask
+);
+router.put(
+  "/:id",
+  authenticateToken,
+  validateDTO(UpdateTaskDTO),
+  TaskController.updateTask
 );
 
 export default router;
