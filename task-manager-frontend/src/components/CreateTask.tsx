@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
 import { CreateTaskFormData } from "@/interface/interfaces";
 import { createTaskSchema } from "@/utils/zodSchemas/zodSchemas";
 import { createTask } from "@/services/taskService";
@@ -17,12 +16,11 @@ const CreateTask: React.FC<CreateTaskProps> = ({ token }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreateTaskFormData>({
     resolver: zodResolver(createTaskSchema),
   });
-
-  const navigate = useNavigate();
 
   const onSubmit = async (data: CreateTaskFormData) => {
     setLoading(true);
@@ -30,7 +28,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ token }) => {
       const response = await createTask(token!, data.title, data.description);
       if (response.status === 200) {
         toast.success(response.data.message);
-        navigate("/dashboard");
+        reset();
       }
     } catch (error: unknown) {
       const errorString = (error as Error).message as string;

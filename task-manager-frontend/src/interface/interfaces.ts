@@ -38,6 +38,24 @@ export interface AuthContextType {
   isAuthenticated: boolean;
 }
 
+export type Task = {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  userId: number;
+};
+
+export type CardProps = {
+  tasks: Task[];
+  onToggleComplete: (taskId: number) => void;
+  onDelete: (taskId: number) => void;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  totalTasks: number;
+};
+
 export type RegisterFormData = z.infer<typeof registerSchema>;
 
 export type LoginFormData = z.infer<typeof loginSchema>;

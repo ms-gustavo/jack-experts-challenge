@@ -1,33 +1,22 @@
 import { useState } from "react";
 import { PaginationDemo } from "./Pagination";
 import { Check } from "lucide-react";
-
-type Task = {
-  id: number;
-  title: string;
-  description: string;
-  completed: boolean;
-  userId: number;
-};
-
-type CardProps = {
-  tasks: Task[];
-  onToggleComplete: (taskId: number) => void;
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  totalTasks: number;
-};
+import { CardProps } from "@/interface/interfaces";
 
 export function TasksCards({
   tasks,
   onToggleComplete,
+  onDelete,
   currentPage,
   totalPages,
   onPageChange,
   totalTasks,
 }: CardProps) {
   const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null);
+
+  const handleDelete = (taskId: number) => {
+    onDelete(taskId);
+  };
 
   const toggleExpand = (taskId: number) => {
     setExpandedTaskId(expandedTaskId === taskId ? null : taskId);
@@ -88,6 +77,28 @@ export function TasksCards({
                   {task.description}
                 </p>
               </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(task.id);
+                }}
+                className="flex items-center justify-center p-2 text-red-600 hover:bg-red-100 rounded-full transition-colors duration-300 ease-in-out"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         ))}

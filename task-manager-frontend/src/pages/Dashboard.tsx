@@ -2,20 +2,13 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
-import { getAllTasks, updateTask } from "@/services/taskService";
+import { deleteTask, getAllTasks, updateTask } from "@/services/taskService";
 import { getLocalStorage } from "@/utils/getLocalStorage";
 import { TasksCards } from "@/components/TasksCards";
 import Loader from "@/components/Loader";
 import { Navigate, Route, Routes } from "react-router-dom";
 import CreateTask from "@/components/CreateTask";
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  completed: boolean;
-  userId: number;
-}
+import { Task } from "@/interface/interfaces";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -76,6 +69,19 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleDeleteTask = async (taskId: number) => {
+    try {
+      const response = await deleteTask(token!, taskId);
+      if (response.status === 204) {
+        toast.success("Tarefa deletada com sucesso");
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+      }
+    } catch (error: unknown) {
+      toast.error("Erro ao deletar a tarefa");
+      console.error("Erro ao deletar a tarefa:", (error as Error).message);
+    }
+  };
+
   const onPageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
@@ -95,17 +101,18 @@ const Dashboard: React.FC = () => {
             element={
               loading ? (
                 <Loader />
-              ) : tasks.length > 0 ? (
+              ) : tasks?.length > 0 ? (
                 <TasksCards
                   tasks={tasks}
                   onToggleComplete={handleToggleComplete}
+                  onDelete={handleDeleteTask}
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={onPageChange}
                   totalTasks={totalTasks}
                 />
               ) : (
-                <p className="text-center text-gray-500">
+                <p className="text-center text-gray-500 mt-5">
                   Nenhuma tarefa disponível
                 </p>
               )
