@@ -49,14 +49,20 @@ export const createTask = async (
 };
 
 export const deleteTask = async (token: string, taskId: number) => {
-  const response = await axios.delete(`${API_URL}tasks/${taskId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  console.log("response", response);
-  return response;
-  // return { status: response.status };
+  try {
+    const response = await axios.delete(`${API_URL}tasks/${taskId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Erro desconhecido");
+    } else {
+      throw new Error("Erro desconhecido");
+    }
+  }
 };
 
 export const updateTask = async (

@@ -28,13 +28,8 @@ export interface AuthResponse extends AxiosResponse {
 
 export interface AuthContextType {
   user: User | null;
-  loginNewUser: (email: string, password: string) => Promise<void>;
-  registerNewUser: (
-    name: string,
-    email: string,
-    password: string
-  ) => Promise<void>;
-  logout: () => void;
+  setToken: (token: string, user: User) => void;
+  clearAuth: () => void;
   isAuthenticated: boolean;
 }
 
@@ -50,6 +45,18 @@ export type CardProps = {
   tasks: Task[];
   onToggleComplete: (taskId: number) => void;
   onDelete: (taskId: number) => void;
+  onEdit: (taskId: number, title: string, description: string) => Promise<void>;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  totalTasks: number;
+};
+
+export type CreateTaskProps = {
+  token: string | null;
+};
+
+export type PaginationProps = {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;

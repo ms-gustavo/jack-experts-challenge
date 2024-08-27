@@ -7,13 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-
-type PaginationProps = {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  totalTasks: number;
-};
+import { PaginationProps } from "@/interface/interfaces";
 
 export function PaginationDemo({
   currentPage,

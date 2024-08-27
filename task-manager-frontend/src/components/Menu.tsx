@@ -8,8 +8,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function MenuBar() {
+  const { clearAuth } = useAuth();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -19,17 +21,27 @@ export function MenuBar() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem asChild className="cursor-pointer">
             <Link to="create-task">
               <PenLine className="mr-2 h-4 w-4" />
               <span>Cadastrar Tarefa</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem asChild className="cursor-pointer">
             <Link to="list-tasks">
               <List className="mr-2 h-4 w-4" />
               <span>Listar Tarefas</span>
             </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Button
+              className="w-full"
+              size={"icon"}
+              onClick={clearAuth}
+              variant="destructive"
+            >
+              Sair
+            </Button>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

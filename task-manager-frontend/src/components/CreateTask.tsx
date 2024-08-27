@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateTaskFormData } from "@/interface/interfaces";
+import { CreateTaskFormData, CreateTaskProps } from "@/interface/interfaces";
 import { createTaskSchema } from "@/utils/zodSchemas/zodSchemas";
 import { createTask } from "@/services/taskService";
 import toast from "react-hot-toast";
 import Loader from "./Loader";
-
-type CreateTaskProps = {
-  token: string | null;
-};
 
 const CreateTask: React.FC<CreateTaskProps> = ({ token }) => {
   const [loading, setLoading] = useState<boolean>(false);

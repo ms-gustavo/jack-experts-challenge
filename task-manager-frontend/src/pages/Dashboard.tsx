@@ -6,7 +6,7 @@ import { deleteTask, getAllTasks, updateTask } from "@/services/taskService";
 import { getLocalStorage } from "@/utils/getLocalStorage";
 import { TasksCards } from "@/components/TasksCards";
 import Loader from "@/components/Loader";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import CreateTask from "@/components/CreateTask";
 import { Task } from "@/interface/interfaces";
 
@@ -18,6 +18,7 @@ const Dashboard: React.FC = () => {
   const [totalTasks, setTotalTasks] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const token = getLocalStorage("token");
+  const location = useLocation();
 
   useEffect(() => {
     if (!user) {
@@ -42,7 +43,7 @@ const Dashboard: React.FC = () => {
     };
 
     getTasks();
-  }, [user, currentPage, token]);
+  }, [user, currentPage, token, location]);
 
   const handleToggleComplete = async (taskId: number) => {
     try {
@@ -82,6 +83,27 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleEditTask = async (
+    taskId: number,
+    title: string,
+    description: string
+  ) => {
+    try {
+      const response = await updateTask(token!, taskId, { title, description });
+      if (response.status === 200) {
+        toast.success("Tarefa atualizada com sucesso");
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === taskId ? { ...task, title, description } : task
+          )
+        );
+      }
+    } catch (error: unknown) {
+      toast.error("Erro ao atualizar a tarefa");
+      console.error("Erro ao atualizar a tarefa:", (error as Error).message);
+    }
+  };
+
   const onPageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
@@ -92,7 +114,7 @@ const Dashboard: React.FC = () => {
     <div className="min-h-screen bg-gray-100">
       {user && <Navbar userName={user.name} />}
 
-      <main className="pt-16 md:pt-4 p-4">
+      <main className="pt-16 p-4">
         <Routes>
           <Route path="create-task" element={<CreateTask token={token} />} />
           <Route index element={<Navigate to="list-tasks" />} />
@@ -106,13 +128,14 @@ const Dashboard: React.FC = () => {
                   tasks={tasks}
                   onToggleComplete={handleToggleComplete}
                   onDelete={handleDeleteTask}
+                  onEdit={handleEditTask}
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={onPageChange}
                   totalTasks={totalTasks}
                 />
               ) : (
-                <p className="text-center text-gray-500 mt-5">
+                <p className="text-center my-5 text-gray-500">
                   Nenhuma tarefa disponível
                 </p>
               )
