@@ -3,11 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFormData } from "../interface/interfaces";
 import { registerSchema } from "../utils/zodSchemas/zodSchemas";
 import { useState } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../contexts/AuthContext";
+import { registerUser } from "../services/authService";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const { registerNewUser } = useAuth();
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -19,7 +23,12 @@ const RegisterForm: React.FC = () => {
   const onSubmit = async (data: RegisterFormData) => {
     setLoading(true);
     try {
-      await registerNewUser(data.name, data.email, data.password);
+      const response = await registerUser(data.name, data.email, data.password);
+      if (response.token) {
+        setToken(response.token, response.user);
+        toast.success("Cadastro realizado com sucesso, redirecionando...");
+        navigate("/dashboard");
+      }
     } catch (error: unknown) {
       console.error(error);
     } finally {

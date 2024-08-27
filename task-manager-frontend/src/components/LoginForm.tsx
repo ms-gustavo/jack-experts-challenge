@@ -2,12 +2,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginFormData } from "../interface/interfaces";
 import { loginSchema } from "../utils/zodSchemas/zodSchemas";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../services/authService";
+import toast from "react-hot-toast";
 
 const LoginForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const { loginNewUser } = useAuth();
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -19,7 +23,12 @@ const LoginForm: React.FC = () => {
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
     try {
-      await loginNewUser(data.email, data.password);
+      const response = await loginUser(data.email, data.password);
+      if (response.token) {
+        setToken(response.token, response.user);
+        toast.success("Login efetuado com sucesso");
+        navigate("/dashboard");
+      }
     } catch (error: unknown) {
       console.error(error);
     } finally {

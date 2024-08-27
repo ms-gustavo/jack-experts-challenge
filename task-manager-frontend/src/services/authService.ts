@@ -29,10 +29,17 @@ export const loginUser = async (
   email: string,
   password: string
 ): Promise<AuthResponse> => {
-  const response = await axios.post<AuthResponse>(`${API_URL}auth/login`, {
-    email,
-    password,
-  });
-
-  return response.data;
+  try {
+    const response = await axios.post<AuthResponse>(`${API_URL}auth/login`, {
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Erro desconhecido");
+    } else {
+      throw new Error("Erro desconhecido");
+    }
+  }
 };
