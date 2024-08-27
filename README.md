@@ -29,7 +29,7 @@
     <h2 id="tecnologias-utilizadas">Tecnologias Utilizadas</h2>
     <ul>
         <li><strong>Backend:</strong> Node.js, Express, TypeScript, Prisma</li>
-        <li><strong>Banco de Dados:</strong> Prisma ORM com MySQL (ou outro banco de dados configurado)</li>
+        <li><strong>Banco de Dados:</strong> Prisma ORM com MySQL</li>
         <li><strong>Autenticação:</strong> JWT para autenticação de usuários</li>
         <li><strong>Validação:</strong> <code>class-validator</code> para validação de dados</li>
         <li><strong>Documentação:</strong> Swagger para documentação da API</li>
@@ -40,10 +40,10 @@
         Configure as seguintes variáveis de ambiente em um arquivo <code>.env</code> na raiz do projeto:
     </p>
     <pre>
-<code>DATABASE_URL="file:./dev.db" # Ou a URL do banco de dados que você estiver utilizando
+<code>DATABASE_URL=""
 DATABASE_TEST_URL=""
-JWT_SECRET="seu_segredo_jwt"
-PORT=</code>
+JWT_SECRET=""
+PORT=""</code>
 </pre>
     <h3>Dependências Globais</h3>
     <p>Certifique-se de ter as seguintes ferramentas instaladas globalmente em seu sistema:</p>
@@ -56,7 +56,7 @@ PORT=</code>
         <li>
             <p>Clone o repositório:</p>
             <pre><code>git clonegit@github.com:ms-gustavo/jack-experts-challenge.git
-cd jack-experts-challenge</code></pre>
+cd jack-experts-challenge/</code></pre>
         </li>
         <li>
             <p>Instale as dependências:</p>
