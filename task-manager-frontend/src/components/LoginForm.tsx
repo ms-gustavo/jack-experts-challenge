@@ -30,6 +30,8 @@ const LoginForm: React.FC = () => {
         navigate("/dashboard");
       }
     } catch (error: unknown) {
+      const errorString = (error as Error).message as string;
+      toast.error(`Erro ao logar: ${errorString}`);
       console.error(error);
     } finally {
       setLoading(false);
