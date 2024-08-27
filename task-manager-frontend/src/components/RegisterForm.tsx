@@ -39,8 +39,12 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
+    <form
+      id="register-form"
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4"
+    >
+      <div id="name-input">
         <label
           htmlFor="name"
           className="block text-sm font-medium text-gray-700"
@@ -59,7 +63,7 @@ const RegisterForm: React.FC = () => {
           <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
         )}
       </div>
-      <div>
+      <div id="email-input">
         <label
           htmlFor="email"
           className="block text-sm font-medium text-gray-700"
@@ -78,7 +82,7 @@ const RegisterForm: React.FC = () => {
           <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
         )}
       </div>
-      <div>
+      <div id="password-input">
         <label
           htmlFor="password"
           className="block text-sm font-medium text-gray-700"

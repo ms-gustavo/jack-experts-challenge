@@ -39,8 +39,12 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
+    <form
+      id="login-form"
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4"
+    >
+      <div id="login-email-input">
         <label
           htmlFor="email"
           className="block text-sm font-medium text-gray-700"
@@ -59,7 +63,7 @@ const LoginForm: React.FC = () => {
           <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
         )}
       </div>
-      <div>
+      <div id="login-password-input">
         <label
           htmlFor="password"
           className="block text-sm font-medium text-gray-700"
