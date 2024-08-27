@@ -1,17 +1,104 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../contexts/AuthContext";
+import toast from "react-hot-toast";
+import { getAllTasks, updateTask } from "@/services/taskService";
+import { getLocalStorage } from "@/utils/getLocalStorage";
+import { CustomCard } from "@/components/TasksCards";
+import Loader from "@/components/Loader";
+
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  userId: number;
+}
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalTasks, setTotalTasks] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const token = getLocalStorage("token");
+
+  useEffect(() => {
+    if (!user) {
+      toast.error(`Erro`);
+      return;
+    }
+    setLoading(true);
+
+    const getTasks = async () => {
+      try {
+        const tasks = await getAllTasks(token!, currentPage);
+        setCurrentPage(tasks.currentPage);
+        setTotalPages(tasks.totalPages);
+        setTotalTasks(tasks.totalTasks);
+        setTasks(tasks.tasks);
+      } catch (error: unknown) {
+        toast.error(`Erro ao buscar tarefas, tente novamente mais tarde`);
+        console.error((error as Error).message as string);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getTasks();
+  }, [user, currentPage, token]);
+
+  const handleToggleComplete = async (taskId: number) => {
+    try {
+      const currentTask = tasks.find((task) => task.id === taskId);
+      if (!currentTask) {
+        toast.error("Tarefa não encontrada");
+        return;
+      }
+
+      const response = await updateTask(token!, taskId, {
+        completed: !currentTask.completed,
+      });
+      if (response.status === 200) {
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === taskId ? { ...task, completed: !task.completed } : task
+          )
+        );
+      }
+    } catch (error: unknown) {
+      const errorString = (error as Error).message as string;
+      toast.error("Erro ao atualizar o status da tarefa");
+      console.error("Erro ao atualizar o status da tarefa:", errorString);
+    }
+  };
+
+  const onPageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
       {user && <Navbar userName={user.name} />}
 
       <main className="pt-16 md:pt-4 p-4">
-        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-        <p>Bem-vindo ao painel de controle do Task Manager!</p>
+        {loading ? (
+          <Loader />
+        ) : tasks.length > 0 ? (
+          <CustomCard
+            tasks={tasks}
+            onToggleComplete={handleToggleComplete}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+            totalTasks={totalTasks}
+          />
+        ) : (
+          <p className="text-center text-gray-500">Nenhuma tarefa disponível</p>
+        )}
       </main>
     </div>
   );
