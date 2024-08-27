@@ -1,22 +1,18 @@
-// src/pages/Dashboard.tsx
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import Navbar from "../components/Navbar";
 import { useAuth } from "../contexts/AuthContext";
 
 const Dashboard: React.FC = () => {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/");
-    }
-  }, [isAuthenticated, navigate]);
+  const { user } = useAuth();
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Bem-vindo ao painel de controle do Task Manager!</p>
+    <div className="min-h-screen bg-gray-100">
+      {user && <Navbar userName={user.name} />}
+
+      <main className="pt-16 md:pt-4 p-4">
+        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+        <p>Bem-vindo ao painel de controle do Task Manager!</p>
+      </main>
     </div>
   );
 };
