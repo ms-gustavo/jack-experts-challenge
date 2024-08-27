@@ -1,8 +1,12 @@
+import { Navigate, Route, Routes } from "react-router-dom";
+import AuthPage from "./pages/AuthPage";
+
 function App() {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <h1 className="text-3xl font-bold underline">Task Manager Frontend</h1>
-    </div>
+    <Routes>
+      <Route path="/" element={<AuthPage />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }
 
