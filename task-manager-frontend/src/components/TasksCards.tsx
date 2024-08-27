@@ -19,7 +19,7 @@ type CardProps = {
   totalTasks: number;
 };
 
-export function CustomCard({
+export function TasksCards({
   tasks,
   onToggleComplete,
   currentPage,

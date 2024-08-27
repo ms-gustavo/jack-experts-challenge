@@ -4,8 +4,10 @@ import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 import { getAllTasks, updateTask } from "@/services/taskService";
 import { getLocalStorage } from "@/utils/getLocalStorage";
-import { CustomCard } from "@/components/TasksCards";
+import { TasksCards } from "@/components/TasksCards";
 import Loader from "@/components/Loader";
+import { Navigate, Route, Routes } from "react-router-dom";
+import CreateTask from "@/components/CreateTask";
 
 interface Task {
   id: number;
@@ -85,20 +87,31 @@ const Dashboard: React.FC = () => {
       {user && <Navbar userName={user.name} />}
 
       <main className="pt-16 md:pt-4 p-4">
-        {loading ? (
-          <Loader />
-        ) : tasks.length > 0 ? (
-          <CustomCard
-            tasks={tasks}
-            onToggleComplete={handleToggleComplete}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={onPageChange}
-            totalTasks={totalTasks}
+        <Routes>
+          <Route path="create-task" element={<CreateTask token={token} />} />
+          <Route index element={<Navigate to="list-tasks" />} />
+          <Route
+            path="list-tasks"
+            element={
+              loading ? (
+                <Loader />
+              ) : tasks.length > 0 ? (
+                <TasksCards
+                  tasks={tasks}
+                  onToggleComplete={handleToggleComplete}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={onPageChange}
+                  totalTasks={totalTasks}
+                />
+              ) : (
+                <p className="text-center text-gray-500">
+                  Nenhuma tarefa disponível
+                </p>
+              )
+            }
           />
-        ) : (
-          <p className="text-center text-gray-500">Nenhuma tarefa disponível</p>
-        )}
+        </Routes>
       </main>
     </div>
   );

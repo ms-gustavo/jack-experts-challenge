@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { loginSchema, registerSchema } from "../utils/zodSchemas/zodSchemas";
+import {
+  createTaskSchema,
+  loginSchema,
+  registerSchema,
+} from "../utils/zodSchemas/zodSchemas";
 import { AxiosResponse } from "axios";
 
 export interface User {
@@ -7,6 +11,12 @@ export interface User {
   id?: number;
   name: string;
   email: string;
+}
+
+export interface UpdateDataType {
+  title?: string;
+  description?: string;
+  completed?: boolean;
 }
 
 export interface AuthResponse extends AxiosResponse {
@@ -31,3 +41,5 @@ export interface AuthContextType {
 export type RegisterFormData = z.infer<typeof registerSchema>;
 
 export type LoginFormData = z.infer<typeof loginSchema>;
+
+export type CreateTaskFormData = z.infer<typeof createTaskSchema>;

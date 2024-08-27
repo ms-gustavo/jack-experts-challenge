@@ -14,7 +14,7 @@ const AppRoutes: React.FC = () => {
         element={isAuthenticated ? <Navigate to="/dashboard" /> : <AuthPage />}
       />
       <Route
-        path="/dashboard"
+        path="/dashboard/*"
         element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />}
       />
     </Routes>

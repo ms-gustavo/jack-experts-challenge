@@ -1,4 +1,4 @@
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { List, PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,13 +19,17 @@ export function MenuBar() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <PenLine className="mr-2 h-4 w-4" />
-            <span>Cadastrar Tarefa</span>
+          <DropdownMenuItem asChild>
+            <Link to="create-task">
+              <PenLine className="mr-2 h-4 w-4" />
+              <span>Cadastrar Tarefa</span>
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <List className="mr-2 h-4 w-4" />
-            <span>Listar Tarefas</span>
+          <DropdownMenuItem asChild>
+            <Link to="list-tasks">
+              <List className="mr-2 h-4 w-4" />
+              <span>Listar Tarefas</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
