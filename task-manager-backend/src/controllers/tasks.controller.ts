@@ -30,13 +30,25 @@ export class TaskController {
 
   static async getAllTasks(req: AuthRequest, res: Response): Promise<Response> {
     try {
-      const tasks = await prisma.task.findMany({
+      const page = parseInt(req.query.page as string) || 1;
+      const pageSize = parseInt(req.query.pageSize as string) || 10;
+      const skip = (page - 1) * pageSize;
+
+      const totalTasks = await prisma.task.count({
         where: { userId: req.user!.userId },
       });
-      if (tasks.length === 0) {
+
+      if (totalTasks === 0) {
         return res.status(204).json();
       }
-      return res.json(tasks);
+      const tasks = await prisma.task.findMany({
+        where: { userId: req.user!.userId },
+        take: pageSize,
+        skip,
+      });
+
+      const totalPages = Math.ceil(totalTasks / pageSize);
+      return res.json({ tasks, currentPage: page, totalPages, totalTasks });
     } catch (error: unknown) {
       return res
         .status(500)

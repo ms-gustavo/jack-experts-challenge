@@ -271,6 +271,78 @@ describe("TaskController", () => {
     });
   });
 
+  describe("GET /api/tasks", () => {
+    it("should return all tasks from the authenticated user", async () => {
+      const mockTasks = [
+        {
+          id: 1,
+          title: "Test Task",
+          description: "Task Description",
+          completed: false,
+          userId,
+        },
+        {
+          id: 2,
+          title: "Test Task 2",
+          description: "Task Description 2",
+          completed: false,
+          userId,
+        },
+      ];
+      const findSpyCount = jest
+        .spyOn(prisma.task, "count")
+        .mockResolvedValue(2);
+
+      const findSpy = jest
+        .spyOn(prisma.task, "findMany")
+        .mockResolvedValue(mockTasks);
+
+      const res = await request(app)
+        .get("/api/tasks")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toEqual({
+        tasks: mockTasks,
+        currentPage: 1,
+        totalPages: 1,
+        totalTasks: 2,
+      });
+      findSpy.mockRestore();
+      findSpyCount.mockRestore();
+    });
+
+    it("should return 204 if there are no tasks for the authenticated user", async () => {
+      const findSpyCount = jest
+        .spyOn(prisma.task, "count")
+        .mockResolvedValue(0);
+
+      const res = await request(app)
+        .get("/api/tasks")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(res.statusCode).toBe(204);
+      findSpyCount.mockRestore();
+    });
+
+    it("should return 500 if there is an error during get tasks", async () => {
+      const findSpy = jest
+        .spyOn(prisma.task, "count")
+        .mockRejectedValue(new Error("Erro ao buscar tarefas:"));
+
+      const res = await request(app)
+        .get("/api/tasks")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(res.statusCode).toBe(500);
+      expect(res.body).toHaveProperty(
+        "message",
+        expect.stringContaining("Erro ao buscar tarefas:")
+      );
+      findSpy.mockRestore();
+    });
+  });
+
   describe("GET /api/tasks/:id", () => {
     it("should return a task if the task belongs to the authenticated user", async () => {
       const mockTask = {

@@ -9,35 +9,60 @@
  * @swagger
  * /tasks:
  *   get:
- *     summary: Retorna todas as tarefas do usuário autenticado
+ *     summary: Retorna todas as tarefas do usuário autenticado com paginação
  *     tags: [Tasks]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           example: 10
+ *
  *     responses:
  *       200:
- *         description: Lista de tarefas do usuário autenticado
+ *         description: Lista de tarefas do usuário autenticado com informações de paginação
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     example: 1
- *                   title:
- *                     type: string
- *                     example: "Comprar pão"
- *                   description:
- *                     type: string
- *                     example: "Comprar pão na padaria perto de casa"
- *                   completed:
- *                     type: boolean
- *                     example: false
- *                   userId:
- *                     type: integer
- *                     example: 1
+ *               type: object
+ *               properties:
+ *                 tasks:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       title:
+ *                         type: string
+ *                         example: "Comprar pão"
+ *                       description:
+ *                         type: string
+ *                         example: "Comprar pão na padaria perto de casa"
+ *                       completed:
+ *                         type: boolean
+ *                         example: false
+ *                       userId:
+ *                         type: integer
+ *                         example: 1
+ *                 currentPage:
+ *                   type: integer
+ *                   example: 1
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 5
+ *                 totalTasks:
+ *                   type: integer
+ *                   example: 50
  *       204:
  *         description: Nenhuma tarefa encontrada para o usuário
  *       500:
