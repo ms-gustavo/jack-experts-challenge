@@ -135,7 +135,10 @@ const Dashboard: React.FC = () => {
                   totalTasks={totalTasks}
                 />
               ) : (
-                <p className="text-center my-5 text-gray-500">
+                <p
+                  id="no-tasks-available"
+                  className="text-center my-5 text-gray-500"
+                >
                   Nenhuma tarefa disponível
                 </p>
               )

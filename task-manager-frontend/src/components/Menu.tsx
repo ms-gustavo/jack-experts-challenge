@@ -15,7 +15,11 @@ export function MenuBar() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="text-slate-900" variant="outline">
+        <Button
+          id="user-actions-button"
+          className="text-slate-900"
+          variant="outline"
+        >
           Ações
         </Button>
       </DropdownMenuTrigger>
@@ -24,17 +28,18 @@ export function MenuBar() {
           <DropdownMenuItem asChild className="cursor-pointer">
             <Link to="create-task">
               <PenLine className="mr-2 h-4 w-4" />
-              <span>Cadastrar Tarefa</span>
+              <span id="create-task-button">Cadastrar Tarefa</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
             <Link to="list-tasks">
               <List className="mr-2 h-4 w-4" />
-              <span>Listar Tarefas</span>
+              <span id="list-tasks-button">Listar Tarefas</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Button
+              id="logout-button"
               className="w-full"
               size={"icon"}
               onClick={clearAuth}

@@ -36,14 +36,23 @@ const CreateTask: React.FC<CreateTaskProps> = ({ token }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
+    <div
+      id="create-task-container"
+      className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-md"
+    >
       {loading ? (
         <Loader />
       ) : (
         <>
-          <h1 className="text-2xl font-bold mb-4">Criar Nova Tarefa</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
+          <h1 id="create-task-header" className="text-2xl font-bold mb-4">
+            Criar Nova Tarefa
+          </h1>
+          <form
+            id="create-task-form"
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4"
+          >
+            <div id="create-task-title-input">
               <label
                 htmlFor="title"
                 className="block text-sm font-medium text-gray-700"
@@ -60,7 +69,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ token }) => {
                 <p className="text-red-500 text-sm">{errors.title.message}</p>
               )}
             </div>
-            <div>
+            <div id="create-task-description-input">
               <label
                 htmlFor="description"
                 className="block text-sm font-medium text-gray-700"
@@ -79,6 +88,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ token }) => {
               )}
             </div>
             <button
+              id="create-task-button"
               type="submit"
               className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
             >

@@ -3,9 +3,14 @@ import { MenuBar } from "./Menu";
 
 const Navbar: React.FC<{ userName: string }> = ({ userName }) => {
   return (
-    <nav className="bg-gray-800 text-white p-4 fixed top-0 left-0 w-full z-10">
+    <nav
+      id="navbar"
+      className="bg-gray-800 text-white p-4 fixed top-0 left-0 w-full z-10"
+    >
       <div className="flex justify-between items-center md:justify-evenly">
-        <span className="text-lg font-bold">Bem-vindo, {userName}</span>
+        <span id="welcome-text" className="text-lg font-bold">
+          Bem-vindo, {userName}
+        </span>
         <MenuBar />
       </div>
     </nav>

@@ -48,13 +48,18 @@ export function TasksCards({
 
   return (
     <div className="w-full max-w-7xl mx-auto my-5 bg-white shadow-lg rounded-lg overflow-hidden">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-xl font-semibold">Tarefas</h2>
-        <p className="text-sm text-gray-500">
+      <div
+        id="dashboard-with-task-container"
+        className="p-4 border-b border-gray-200"
+      >
+        <h2 id="dashboard-with-task-header" className="text-xl font-semibold">
+          Tarefas
+        </h2>
+        <p id="dashboard-with-task-text" className="text-sm text-gray-500">
           Você tem {totalTasks} tarefa{totalTasks > 1 && "s"}.
         </p>
       </div>
-      <div className="mt-2">
+      <div id="pagination-container" className="mt-2">
         <PaginationDemo
           currentPage={currentPage}
           totalPages={totalPages}
@@ -62,17 +67,22 @@ export function TasksCards({
           totalTasks={totalTasks}
         />
       </div>
-      <div className="p-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div
+        id="tasks-container"
+        className="p-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+      >
         {tasks.map((task) => (
           <div
             key={task.id}
             className="border border-gray-200 rounded-md overflow-hidden bg-white"
           >
             <div
+              data-value={`task-expand-${task.id}`}
               onClick={() => toggleExpand(task.id)}
               className="flex items-start space-x-4 p-4 w-full text-left cursor-pointer"
             >
               <button
+                data-value={`task-complete-${task.id}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onToggleComplete(task.id);
@@ -80,13 +90,19 @@ export function TasksCards({
                 className="flex items-center justify-center h-5 w-5 rounded-full border-2 focus:outline-none"
               >
                 <span
+                  data-value={`task-uncompleted-${task.id}`}
                   className={`flex h-4 w-4 rounded-full border-2 ${
                     task.completed
                       ? "bg-green-500 border-green-700"
                       : "bg-sky-500 border-sky-700"
                   }`}
                 >
-                  {task.completed && <Check className="h-3 w-3 text-white" />}
+                  {task.completed && (
+                    <Check
+                      data-value={`task-check-${task.id}`}
+                      className="h-3 w-3 text-white"
+                    />
+                  )}
                 </span>
               </button>
               <div className="flex-1">
@@ -107,6 +123,7 @@ export function TasksCards({
                     />
                     <div className="flex space-x-2">
                       <button
+                        data-value={`task-save-${task.id}`}
                         onClick={() => handleSave(task.id)}
                         className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                       >
@@ -122,10 +139,14 @@ export function TasksCards({
                   </div>
                 ) : (
                   <div>
-                    <h3 className="text-sm font-medium truncate">
+                    <h3
+                      data-value={`task-title-${task.id}`}
+                      className="text-sm font-medium truncate"
+                    >
                       {task.title}
                     </h3>
                     <p
+                      data-value={`task-description-${task.id}`}
                       className={`text-sm ${
                         expandedTaskId === task.id
                           ? "whitespace-normal"
@@ -139,6 +160,7 @@ export function TasksCards({
               </div>
               <div className="flex items-center space-x-2">
                 <button
+                  data-value={`task-edit-pencil-${task.id}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleEdit(task.id);
@@ -148,6 +170,7 @@ export function TasksCards({
                   <Pencil className="h-5 w-5" />
                 </button>
                 <button
+                  data-value={`task-delete-x-${task.id}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDelete(task.id);

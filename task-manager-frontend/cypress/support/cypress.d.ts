@@ -9,5 +9,15 @@ declare namespace Cypress {
     registerNewUser(): Chainable<Subject>;
     checkToast(message: string): Chainable<Subject>;
     loginUser(): Chainable<Subject>;
+    getNavBar(): Chainable<Subject>;
+    renderDashboard(): Chainable<Subject>;
+    renderCreateTaskForm(): Chainable<Subject>;
+    createNewTask(title: string, description: string): Chainable<Subject>;
+    checkCreateTaskValidationError(): Chainable<Subject>;
+    renderDashboardWithTasks(description: string): Chainable<Subject>;
+    completeTask(): Chainable<Subject>;
+    editTask(): Chainable<Subject>;
+    removeTask(): Chainable<Subject>;
+    logout(): Chainable<Subject>;
   }
 }
